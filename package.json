@@ -1,6 +1,6 @@
 {
   "name": "react-native-multi-word-highlight",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A react native library for highlighting | filtering | custom styling | replacing a given set of words",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
