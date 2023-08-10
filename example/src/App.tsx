@@ -1,18 +1,37 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-multi-word-highlight';
+import { StyleSheet, Text, View } from 'react-native';
+import { MultiWordHighlighter } from 'react-native-multi-word-highlight';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [text, _] = React.useState<string>('React native multi word highlight');
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+  React.useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Original Text: {text}</Text>
+      <MultiWordHighlighter
+        searchWords={[
+          {
+            word: 'React',
+            replace: 'HTML',
+            textStyle: {
+              backgroundColor: 'red',
+              color: 'white',
+              padding: 2,
+              textDecorationLine: 'line-through',
+            },
+          },
+          {
+            word: 'native',
+            textStyle: { backgroundColor: 'blue', color: 'white', padding: 2 },
+          },
+          { word: 'highlight' },
+        ]}
+        textToHighlight={text}
+        defaultHighlightTextStyle={{ color: 'red' }}
+      />
     </View>
   );
 }
@@ -22,10 +41,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
   },
 });

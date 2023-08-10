@@ -1,6 +1,6 @@
 # react-native-multi-word-highlight
 
-A react native library for in text highlighting words
+A react native library for highlighting | filtering | custom styling | replacing a given set of words
 
 ## Installation
 
@@ -11,11 +11,29 @@ npm install react-native-multi-word-highlight
 ## Usage
 
 ```js
-import { multiply } from 'react-native-multi-word-highlight';
+import { MultiWordHighlighter } from 'react-native-multi-word-highlight';
 
-// ...
-
-const result = await multiply(3, 7);
+<MultiWordHighlighter
+  searchWords={[
+    {
+      word: 'React',
+      replace: 'HTML',
+      textStyle: {
+        backgroundColor: 'red',
+        color: 'white',
+        padding: 2,
+        textDecorationLine: 'line-through',
+      },
+    },
+    {
+      word: 'native',
+      textStyle: { backgroundColor: 'blue', color: 'white', padding: 2 },
+    },
+    { word: 'highlight' },
+  ]}
+  textToHighlight={text}
+  defaultHighlightTextStyle={{ color: 'red' }}
+/>;
 ```
 
 ## Contributing
