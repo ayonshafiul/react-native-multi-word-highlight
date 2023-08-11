@@ -40,13 +40,13 @@
     "ios",
     "android",
     "highlight",
-    "replace text",
+    "tags",
+    "tags colorize",
+    "replace words",
     "filter words",
     "block words",
-    "replace words",
     "hide words",
-    "block offensive words",
-    "custom inline style words"
+    "custom inline span style words"
   ],
   "repository": "https://github.com/ayonshafiul/react-native-multi-word-highlight",
   "author": "ayonshafiul <ayonshafiul@gmail.com> (https://github.com/ayonshafiul)",
@@ -166,6 +166,6 @@
     ]
   },
   "dependencies": {
-    "highlight-words-core": "^1.2.2"
+    "linebreak": "^1.1.0"
   }
 }

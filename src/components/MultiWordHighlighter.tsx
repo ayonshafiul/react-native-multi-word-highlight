@@ -1,25 +1,52 @@
-import React from 'react';
-import { findAll } from 'highlight-words-core';
-import type { ViewStyle } from 'react-native';
-import type { TextStyle } from 'react-native';
-import { View } from 'react-native';
-import { StyleSheet } from 'react-native';
-import { Text } from 'react-native';
+import React, { useMemo } from 'react';
+import LineBreaker from 'linebreak';
+import type { ViewStyle, TextStyle } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 export type MultiWordHighlighterProps = {
+  /**
+   * Array of words to higlight/replace/style
+   */
   searchWords: SearchWordConfig[];
+  /**
+   * The text in which to search for words
+   */
   textToHighlight: string;
-  autoEscape?: boolean;
+  /**
+   * Match case while searching for words
+   */
   caseSensitive?: boolean;
-  sanitize?: boolean;
+  /**
+   * Custom styling for the container view
+   */
   viewContainerStyle?: ViewStyle;
-  defaultHighlightTextStyle: TextStyle;
+  /**
+   * Default style applied for all matched words which doesn't contain textStyle
+   * If textStyle is supplied, defaultHighlightTextStyle will be ignored
+   */
+  defaultHighlightTextStyle?: TextStyle;
+  /**
+   * Style applied for all non matching text
+   */
+  nonMatchedStringTextStyle?: TextStyle;
+  /**
+   * If replace is not supplied for a word, this value will be used as default replacing value
+   */
   replaceAllMatchedTextWith?: string;
 };
 
 export type SearchWordConfig = {
+  /**
+   *  word to search for
+   */
   word: string;
+  /**
+   * replace matched word with this value
+   */
   replace?: string;
+  /**
+   * style for matched text
+   */
   textStyle?: TextStyle;
 };
 
@@ -29,51 +56,77 @@ type WordToSearcWordConfigMap = {
 
 export default function MultiWordHighlighter(props: MultiWordHighlighterProps) {
   const {
-    autoEscape = false,
     searchWords,
     textToHighlight,
     caseSensitive = false,
-    viewContainerStyle = {},
-    defaultHighlightTextStyle = {},
+    viewContainerStyle = null,
+    defaultHighlightTextStyle = null,
+    nonMatchedStringTextStyle,
     replaceAllMatchedTextWith,
   } = props;
 
-  const searchWordsArray = searchWords.map((searchWord) => searchWord.word);
-  const wordToConfigMap: WordToSearcWordConfigMap = {};
-  searchWords.forEach((searchWord) => {
-    wordToConfigMap[searchWord.word] = searchWord;
-  });
+  const words = useMemo(() => {
+    let arr = [];
+    const breaker = new LineBreaker(textToHighlight);
+    let last = 0;
+    let bk;
 
-  const chunks = findAll({
-    autoEscape,
-    searchWords: searchWordsArray,
-    textToHighlight,
-    caseSensitive,
-  });
+    while ((bk = breaker.nextBreak())) {
+      var word = textToHighlight.slice(last, bk.position);
+      arr.push(word);
+      last = bk.position;
+    }
+    return arr;
+  }, [textToHighlight]);
+
+  const wordToConfigMap = useMemo(() => {
+    let map: WordToSearcWordConfigMap = {};
+    searchWords.forEach((searchWord) => {
+      let key = searchWord.word;
+      if (!caseSensitive) {
+        key = key.toLowerCase();
+      }
+      map[key] = searchWord;
+    });
+    return map;
+  }, [searchWords, caseSensitive]);
+
   return (
-    <View style={[styles.containerStyle, viewContainerStyle]}>
-      {chunks.map((chunk, idx) => {
-        const { end, highlight, start } = chunk;
-        const text = textToHighlight.substr(start, end - start);
-        if (highlight) {
+    <View style={[styles.viewContainerStyle, viewContainerStyle]}>
+      {words.map((w, idx) => {
+        const text = w;
+        let key = text.replace(/[^a-zA-Z0-9]/, '');
+        if (!caseSensitive) {
+          key = key.toLowerCase();
+        }
+        if (wordToConfigMap[key]) {
           return (
             <Text
               key={idx}
               style={[
-                wordToConfigMap[text]?.textStyle
-                  ? wordToConfigMap[text]?.textStyle
+                wordToConfigMap[key]?.textStyle
+                  ? wordToConfigMap[key]?.textStyle
                   : defaultHighlightTextStyle,
               ]}
             >
-              {wordToConfigMap[text]?.replace
-                ? wordToConfigMap[text]?.replace
+              {wordToConfigMap[key]?.replace
+                ? text.replace(key, wordToConfigMap[key]?.replace!)
                 : replaceAllMatchedTextWith
-                ? replaceAllMatchedTextWith
+                ? text.replace(key, replaceAllMatchedTextWith)
                 : text}
             </Text>
           );
         } else {
-          return <Text key={idx}>{text}</Text>;
+          return (
+            <Text
+              key={idx}
+              style={
+                nonMatchedStringTextStyle ? nonMatchedStringTextStyle : null
+              }
+            >
+              {text}
+            </Text>
+          );
         }
       })}
     </View>
@@ -81,7 +134,7 @@ export default function MultiWordHighlighter(props: MultiWordHighlighterProps) {
 }
 
 const styles = StyleSheet.create({
-  containerStyle: {
+  viewContainerStyle: {
     flexDirection: 'row',
     flexWrap: 'wrap',
   },

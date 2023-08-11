@@ -1,36 +1,48 @@
 import * as React from 'react';
-
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { MultiWordHighlighter } from 'react-native-multi-word-highlight';
 
 export default function App() {
-  const [text, _] = React.useState<string>('React native multi word highlight');
-
-  React.useEffect(() => {}, []);
+  let text =
+    'React native highlight multiple words. Block offensive words. Replace any text.';
 
   return (
     <View style={styles.container}>
-      <Text>Original Text: {text}</Text>
       <MultiWordHighlighter
         searchWords={[
           {
-            word: 'React',
-            replace: 'HTML',
+            word: 'REact',
             textStyle: {
               backgroundColor: 'red',
               color: 'white',
+              fontWeight: 'bold',
+              borderRadius: 8,
               padding: 2,
-              textDecorationLine: 'line-through',
+              marginHorizontal: 4,
             },
           },
           {
             word: 'native',
-            textStyle: { backgroundColor: 'blue', color: 'white', padding: 2 },
+            textStyle: {
+              backgroundColor: 'green',
+              color: 'white',
+              paddingHorizontal: 2,
+            },
           },
           { word: 'highlight' },
+          { word: 'offensive', replace: '******' },
+          { word: 'any', replace: 'all' },
         ]}
         textToHighlight={text}
-        defaultHighlightTextStyle={{ color: 'red' }}
+        defaultHighlightTextStyle={{ color: 'white' }}
+        viewContainerStyle={{
+          backgroundColor: '#0336ff',
+          padding: 16,
+          margin: 16,
+        }}
+        nonMatchedStringTextStyle={{
+          fontWeight: 'bold',
+        }}
       />
     </View>
   );
