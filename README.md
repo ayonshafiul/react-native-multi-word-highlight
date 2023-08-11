@@ -70,6 +70,10 @@ const styles = StyleSheet.create({
 });
 ```
 
+## Demo
+
+![Image Demo](https://raw.githubusercontent.com/ayonshafiul/react-native-multi-word-highlight/main/demo/image.png 'Screenshot of running app')
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
