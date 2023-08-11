@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+// @ts-ignore
 import LineBreaker from 'linebreak';
 import type { ViewStyle, TextStyle } from 'react-native';
 import { View, StyleSheet, Text } from 'react-native';
