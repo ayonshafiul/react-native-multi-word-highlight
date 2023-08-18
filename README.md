@@ -2,6 +2,14 @@
 
 A react native library for highlighting | filtering | custom styling | replacing a given set of words
 
+![npm](https://img.shields.io/npm/v/react-native-multi-word-highlight)
+![NPM](https://img.shields.io/npm/l/react-native-multi-word-highlight)
+![GitHub issues](https://img.shields.io/github/issues/ayonshafiul/react-native-multi-word-highlight)
+![npm bundle size](https://img.shields.io/bundlephobia/min/react-native-multi-word-highlight)
+![npm](https://img.shields.io/npm/dw/react-native-multi-word-highlight)
+![GitHub forks](https://img.shields.io/github/forks/ayonshafiul/react-native-multi-word-highlight)
+![GitHub Repo stars](https://img.shields.io/github/stars/ayonshafiul/react-native-multi-word-highlight)
+
 ## Installation
 
 ```sh
